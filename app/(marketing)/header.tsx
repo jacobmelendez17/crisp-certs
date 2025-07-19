@@ -1,4 +1,14 @@
 import Image from 'next/image';
+import {
+	ClerkLoading,
+	ClerkLoaded,
+	SignedIn,
+	SignedOut,
+	SignInButton,
+	UserButton
+} from '@clerk/nextjs';
+import { Loader } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 export const Header = () => {
 	return (
@@ -8,6 +18,21 @@ export const Header = () => {
 					<Image src="/mascot.svg" height={40} width={40} alt="Mascot" />
 					<h1 className="tracking wide text-2xl font-extrabold text-green-600">Crisp Lingo</h1>
 				</div>
+				<ClerkLoading>
+					<Loader className="text-muted-foreground h-5 animate-spin" />
+				</ClerkLoading>
+				<ClerkLoaded>
+					<SignedIn>
+						<UserButton />
+					</SignedIn>
+					<SignedOut>
+						<SignInButton mode="modal">
+							<Button size="lg" variant="ghost">
+								Login
+							</Button>
+						</SignInButton>
+					</SignedOut>
+				</ClerkLoaded>
 			</div>
 		</header>
 	);
