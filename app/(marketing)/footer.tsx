@@ -19,7 +19,7 @@ export const Footer = () => {
 				</Button>
 				<Button size="lg" variant="ghost">
 					<Image src="/ph.svg" alt="Japanese" height={32} width={40} className="mr-4 rounded-md" />
-					Philippines
+					Tagalog
 				</Button>
 			</div>
 		</footer>
