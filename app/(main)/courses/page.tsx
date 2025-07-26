@@ -1,12 +1,13 @@
 import { getCourses } from '@/db/queries';
+import { List } from './list';
 
 const CoursesPage = async () => {
-	const data = await getCourses();
+	const courses = await getCourses();
 
 	return (
 		<div className="mx-auto h-full max-w-[912px]">
 			<h1 className="text-neurtral-700 text-2xl font-bold">Language Courses</h1>
-			{JSON.stringify(data)}
+			<List courses={courses} activeCourseId={1} />
 		</div>
 	);
 };
