@@ -2,13 +2,14 @@ import { StickyWrapper } from '@/components/sticky-wrapper';
 import { FeedWrapper } from '@/components/feed-wrapper';
 import { Header } from './header';
 import { UserProgress } from '@/components/user-progress';
-import { getUserProgress } from '@/db/queries';
+import { getUnits, getUserProgress } from '@/db/queries';
 import { redirect } from 'next/navigation';
 
 const LearnPage = async () => {
 	const userProgressData = getUserProgress();
+	const unitsData = getUnits();
 
-	const [userProgress] = await Promise.all([userProgressData]);
+	const [userProgress, units] = await Promise.all([userProgressData, unitsData]);
 
 	// if there is no user progress, have the user choose a course
 	if (!userProgress || !userProgress.activeCourse) {
@@ -27,6 +28,11 @@ const LearnPage = async () => {
 			</StickyWrapper>
 			<FeedWrapper>
 				<Header title={userProgress.activeCourse.title} />
+				{units?.map((unit) => (
+					<div key={unit.id} className="mb-10">
+						{JSON.stringify(unit)}
+					</div>
+				))}
 			</FeedWrapper>
 		</div>
 	);
