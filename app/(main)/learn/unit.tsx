@@ -1,4 +1,5 @@
 import { lessons, units } from '@/db/schema';
+import { UnitBanner } from './unit-banner';
 
 type Props = {
 	id: number;
@@ -25,5 +26,9 @@ export const Unit = ({
 	activeLesson,
 	activeLessonPercentage
 }: Props) => {
-	return <></>;
+	return (
+		<>
+			<UnitBanner title={title} description={description} />
+		</>
+	);
 };
