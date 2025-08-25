@@ -83,3 +83,50 @@ export const getCourseById = cache(async (courseId: number) => {
 
     return data;
 });
+
+export const getCourseProgress = cache(async () => {
+    const up = await getUserProgress();
+    const userId = up?.userId;
+
+    if (!userId || up?.activeCourseId == null) {
+        return null;
+    }
+
+    const unitsInActiveCourse = await db.query.units.findMany({
+        orderBy: (units, { asc }) => [asc(units.order)],
+        where: eq(units.courseId, userProgress.activeCourseId),
+        with: {
+            lessons: {
+                orderBy: (lessons, { asc }) => [asc(lessons.order)],
+                with: {
+                    unit: true,
+                    challenges: {
+                        with: {
+                            challengeProgress: {
+                                where: eq(challenge_progress.userId, userId),
+                            },
+                        },
+                    },
+                },
+            },
+        },
+    });
+
+    const firstUncompletedLesson = unitsInActiveCourse
+        .flatMap((unit) => unit.lessons)
+        .find((lesson) => {
+            return lesson.challenges.some((challenge) => {
+                return !challenge.challengeProgress || challenge.challengeProgress.length === 0;
+            });
+        });
+
+    return {
+        activeLesson: firstUncompletedLesson,
+        activeLessonId: firstUncompletedLesson?.id,
+    };
+});
+
+export const getLesson = cache(async (id?: number) => {
+    const { userId } = await auth();
+    const courseProgress = await getCourseProgress();
+});
