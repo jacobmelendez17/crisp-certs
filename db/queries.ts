@@ -87,44 +87,44 @@ export const getCourseById = cache(async (courseId: number) => {
 export const getCourseProgress = cache(async () => {
     const up = await getUserProgress();
     const userId = up?.userId;
+    const activeCourseId = up?.activeCourseId;
 
-    if (!userId || up?.activeCourseId == null) {
-        return null;
-    }
+    if (!userId || activeCourseId == null) return null;
 
     const unitsInActiveCourse = await db.query.units.findMany({
-        orderBy: (units, { asc }) => [asc(units.order)],
-        where: eq(units.courseId, userProgress.activeCourseId),
+        orderBy: (u, { asc }) => [asc(u.order)],
+        where: eq(units.courseId, activeCourseId), // ← VALUE, not table column
         with: {
-            lessons: {
-                orderBy: (lessons, { asc }) => [asc(lessons.order)],
+        lessons: {
+            orderBy: (l, { asc }) => [asc(l.order)],
+            with: {
+            unit: true,
+            challenges: {
                 with: {
-                    unit: true,
-                    challenges: {
-                        with: {
-                            challengeProgress: {
-                                where: eq(challenge_progress.userId, userId),
-                            },
-                        },
-                    },
+                challengeProgress: {
+                    where: eq(challenge_progress.userId, userId),
+                },
                 },
             },
+            },
+        },
         },
     });
 
     const firstUncompletedLesson = unitsInActiveCourse
         .flatMap((unit) => unit.lessons)
-        .find((lesson) => {
-            return lesson.challenges.some((challenge) => {
-                return !challenge.challengeProgress || challenge.challengeProgress.length === 0 || challenge.challengeProgress.some((progress) => progress.completed === false);
-            });
-        });
+        .find((lesson) =>
+        lesson.challenges.some(
+            (ch) => !ch.challengeProgress || ch.challengeProgress.length === 0
+        )
+        );
 
     return {
         activeLesson: firstUncompletedLesson,
         activeLessonId: firstUncompletedLesson?.id,
     };
 });
+
 
 export const getLesson = cache(async (id?: number) => {
     const { userId } = await auth();
