@@ -15,6 +15,7 @@ export const Challenge = ({ options, onSelect, status, selectedOption, disabled,
 	return (
 		<div
 			className={cn(
+				'grid gap-4',
 				type === 'ASSIST' && 'grid-1',
 				type === 'SELECT' && 'grid-cols-2 lg:grid-cols-[repeat(auto-fit,minmax(0,1fr))]'
 			)}
