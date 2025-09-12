@@ -9,10 +9,11 @@ import { Footer } from './footer';
 import { upsertChallengeProgress } from '@/actions/challenge-progress';
 import { toast } from 'sonner';
 import { reduceHearts } from '@/actions/user-progress';
-import { useAudio } from 'react-use';
+import { useAudio, useWindowSize } from 'react-use';
 import Image from 'next/image';
 import { ResultCard } from './result-card';
 import { useRouter } from 'next/navigation';
+import Confetti from 'react-confetti';
 
 type Props = {
 	initialPercentage: number;
@@ -32,8 +33,11 @@ export const Quiz = ({
 	initialLessonChallenges,
 	userSubscription
 }: Props) => {
+	const { width, height } = useWindowSize();
+
 	const router = useRouter();
 
+	const [finishAudio] = useAudio({ src: 'finish.mp3', autoPlay: true });
 	const [correctAudio, _c, correctControls] = useAudio({ src: '/correct.wav' });
 	const [incorrectAudio, _i, incorretControls] = useAudio({ src: '/incorrect.wav' });
 	const [pending, startTransition] = useTransition();
@@ -125,9 +129,17 @@ export const Quiz = ({
 		}
 	};
 
-	if (true || !challenge) {
+	if (!challenge) {
 		return (
 			<>
+				{finishAudio}
+				<Confetti
+					width={width}
+					height={height}
+					recycle={false}
+					numberOfPieces={500}
+					tweenDuration={10000}
+				/>
 				<div className="mx-auto flex h-full max-w-lg flex-col justify-center gap-y-4 text-center lg:gap-y-8">
 					<Image
 						src="/finish.svg"
