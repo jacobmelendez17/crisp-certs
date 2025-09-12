@@ -10,6 +10,9 @@ import { upsertChallengeProgress } from '@/actions/challenge-progress';
 import { toast } from 'sonner';
 import { reduceHearts } from '@/actions/user-progress';
 import { useAudio } from 'react-use';
+import Image from 'next/image';
+import { ResultCard } from './result-card';
+import { useRouter } from 'next/navigation';
 
 type Props = {
 	initialPercentage: number;
@@ -29,10 +32,13 @@ export const Quiz = ({
 	initialLessonChallenges,
 	userSubscription
 }: Props) => {
+	const router = useRouter();
+
 	const [correctAudio, _c, correctControls] = useAudio({ src: '/correct.wav' });
 	const [incorrectAudio, _i, incorretControls] = useAudio({ src: '/incorrect.wav' });
 	const [pending, startTransition] = useTransition();
 
+	const [lessonId] = useState(initialLessonId);
 	const [hearts, setHearts] = useState(initialHearts);
 	const [percentage, setPercentage] = useState(initialPercentage);
 	const [challenges] = useState(initialLessonChallenges);
@@ -119,8 +125,28 @@ export const Quiz = ({
 		}
 	};
 
-	if (!challenge) {
-		return <div>Finished the challenge!</div>;
+	if (true || !challenge) {
+		return (
+			<>
+				<div className="mx-auto flex h-full max-w-lg flex-col justify-center gap-y-4 text-center lg:gap-y-8">
+					<Image
+						src="/finish.svg"
+						alt="Finish"
+						className="hidden lg:block"
+						height={50}
+						width={50}
+					/>
+					<h1 className="text font-bold text-neutral-700 lg:text-3xl">
+						Great job! <br /> You&apos;ve completed the lesson.
+					</h1>
+					<div className="2-full flex items-center gap-x-4">
+						<ResultCard variant="points" value={challenges.length * 10} />
+						<ResultCard variant="hearts" value={hearts} />
+					</div>
+				</div>
+				<Footer lessonId={lessonId} status="completed" onCheck={() => router.push('/learn')} />
+			</>
+		);
 	}
 
 	const title = challenge.type === 'ASSIST' ? 'Select the correct meaning' : challenge.question;
