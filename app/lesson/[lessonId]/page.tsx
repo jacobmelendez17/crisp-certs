@@ -2,14 +2,20 @@ import { getLesson, getUserProgress } from '@/db/queries';
 import { redirect } from 'next/navigation';
 import { Quiz } from '../quiz';
 
-const LessonIdPage = async () => {
-	const lessonData = getLesson();
+type Props = {
+	params: {
+		lessonId: number;
+	};
+};
+
+const LessonIdPage = async ({ params }: Props) => {
+	const lessonData = getLesson(params.lessonId);
 	const userProgressData = getUserProgress();
 
 	const [lesson, userProgress] = await Promise.all([lessonData, userProgressData]);
 
 	if (!lesson || !userProgress) {
-		return null;
+		redirect('/learn');
 	}
 
 	const initialPercentage =
