@@ -6,7 +6,7 @@ import db from "./drizzle";
 import { courses, units, lessons, challenge_progress, userProgress, userSubscription } from "@/db/schema";
 
 export const getUserProgress = cache(async () => {
-    const {userId } = await auth();
+    const { userId } = await auth();
 
     if (!userId) {
         return null;
