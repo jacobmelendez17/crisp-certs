@@ -4,9 +4,8 @@ import { getUserProgress, getUserSubscription } from '@/db/queries';
 import { UserProgress } from '@/components/user-progress';
 import { redirect } from 'next/navigation';
 import Image from 'next/image';
-import { Items } from './items';
 
-const ShopPage = async () => {
+const LeaderboardPage = async () => {
 	const userProgressData = getUserProgress();
 	const userSubscriptionData = getUserSubscription();
 
@@ -31,20 +30,15 @@ const ShopPage = async () => {
 			</StickyWrapper>
 			<FeedWrapper>
 				<div className="flex w-full flex-col items-center">
-					<Image src="/shop.svg" alt="Shop" height={90} width={90} />
-					<h1 className="my-6 text-center text-2xl font-bold text-neutral-800">Shop</h1>
+					<Image src="/leaderboard.svg" alt="Shop" height={90} width={90} />
+					<h1 className="my-6 text-center text-2xl font-bold text-neutral-800">Leaderboard</h1>
 					<p className="text-muted-foreground mb-6 text-center text-lg">
-						Spend your points on cool stuff.
+						See where you stand among other members in the community.
 					</p>
-					<Items
-						hearts={userProgress.hearts}
-						points={userProgress.points}
-						hasActiveSubscription={!!userSubscription?.isActive}
-					/>
 				</div>
 			</FeedWrapper>
 		</div>
 	);
 };
 
-export default ShopPage;
+export default LeaderboardPage;
