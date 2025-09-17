@@ -22,6 +22,8 @@ const LeaderboardPage = async () => {
 		redirect('/courses');
 	}
 
+	const isPro = !!userSubscription?.isActive;
+
 	return (
 		<div className="flex flex-row-reverse gap-[48px] px-6">
 			<StickyWrapper>
@@ -29,12 +31,12 @@ const LeaderboardPage = async () => {
 					activeCourse={userProgress.activeCourse}
 					hearts={userProgress.hearts}
 					points={userProgress.points}
-					hasActiveSubscription={!!userSubscription?.isActive}
+					hasActiveSubscription={isPro}
 				/>
 			</StickyWrapper>
 			<FeedWrapper>
 				<div className="flex w-full flex-col items-center">
-					<Image src="/leaderboard.svg" alt="Shop" height={90} width={90} />
+					<Image src="/leaderboard.svg" alt="Leaderboard" height={90} width={90} />
 					<h1 className="my-6 text-center text-2xl font-bold text-neutral-800">Leaderboard</h1>
 					<p className="text-muted-foreground mb-6 text-center text-lg">
 						See where you stand among other members in the community.
