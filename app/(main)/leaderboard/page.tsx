@@ -6,6 +6,7 @@ import { redirect } from 'next/navigation';
 import Image from 'next/image';
 import { Separator } from '@/components/ui/separator';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
+import { Promo } from '@/components/promo';
 
 const LeaderboardPage = async () => {
 	const userProgressData = getUserProgress();
@@ -33,6 +34,7 @@ const LeaderboardPage = async () => {
 					points={userProgress.points}
 					hasActiveSubscription={isPro}
 				/>
+				{!isPro && <Promo />}
 			</StickyWrapper>
 			<FeedWrapper>
 				<div className="flex w-full flex-col items-center">

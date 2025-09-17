@@ -5,6 +5,7 @@ import { UserProgress } from '@/components/user-progress';
 import { redirect } from 'next/navigation';
 import Image from 'next/image';
 import { Progress } from '@/components/ui/progress';
+import { Promo } from '@/components/promo';
 
 const quests = [
 	{
@@ -53,6 +54,7 @@ const QuestsPage = async () => {
 					points={userProgress.points}
 					hasActiveSubscription={isPro}
 				/>
+				{!isPro && <Promo />}
 			</StickyWrapper>
 			<FeedWrapper>
 				<div className="flex w-full flex-col items-center">
