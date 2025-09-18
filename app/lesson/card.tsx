@@ -5,7 +5,7 @@ import { useAudio, useKey } from 'react-use';
 import { useCallback } from 'react';
 
 type Props = {
-	id: number;
+	//id: number;
 	imageSrc: string | null;
 	audioSrc: string | null;
 	text: string;
@@ -18,7 +18,7 @@ type Props = {
 };
 
 export const Card = ({
-	id,
+	//id,
 	imageSrc,
 	audioSrc,
 	text,
@@ -29,7 +29,7 @@ export const Card = ({
 	disabled,
 	type
 }: Props) => {
-	const [audio, _, controls] = useAudio({ src: audioSrc || '' });
+	const [audio, , controls] = useAudio({ src: audioSrc || '' });
 
 	const handleClick = useCallback(() => {
 		if (disabled) return;

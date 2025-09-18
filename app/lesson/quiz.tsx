@@ -25,11 +25,7 @@ type Props = {
 		completed: boolean;
 		challengeOptions: (typeof challenge_options.$inferSelect)[];
 	})[];
-	userSubscription:
-		| (typeof userSubscription.$inferSelect & {
-				isActive: boolean;
-		  })
-		| null;
+	userSubscription: (typeof userSubscription.$inferSelect & { isActive: boolean }) | null;
 };
 
 export const Quiz = ({
@@ -43,70 +39,63 @@ export const Quiz = ({
 	const { open: openPracticeModal } = usePracticeModal();
 
 	useMount(() => {
-		if (initialPercentage === 100) {
-			openPracticeModal();
-		}
+		if (initialPercentage === 100) openPracticeModal();
 	});
 
 	const { width, height } = useWindowSize();
-
 	const router = useRouter();
 
+	// react-use useAudio returns [audio, state, controls, ref]
 	const [finishAudio] = useAudio({ src: 'finish.mp3', autoPlay: true });
-	const [correctAudio, _c, correctControls] = useAudio({ src: '/correct.wav' });
-	const [incorrectAudio, _i, incorretControls] = useAudio({ src: '/incorrect.wav' });
+	const [correctAudio, , correctControls] = useAudio({ src: '/correct.wav' });
+	const [incorrectAudio, , incorrectControls] = useAudio({ src: '/incorrect.wav' });
+
 	const [pending, startTransition] = useTransition();
 
 	const [lessonId] = useState(initialLessonId);
 	const [hearts, setHearts] = useState(initialHearts);
-	const [percentage, setPercentage] = useState(() => {
-		return initialPercentage == 100 ? 0 : initialPercentage;
-	});
+	const [percentage, setPercentage] = useState(() =>
+		initialPercentage === 100 ? 0 : initialPercentage
+	);
 	const [challenges] = useState(initialLessonChallenges);
 	const [activeIndex, setActiveIndex] = useState(() => {
-		const uncompletedIndex = challenges.findIndex((challenge) => !challenge.completed);
+		const uncompletedIndex = challenges.findIndex((c) => !c.completed);
 		return uncompletedIndex === -1 ? 0 : uncompletedIndex;
 	});
 
-	const [selectedOption, setSelectedOption] = useState<number>();
+	const [selectedOption, setSelectedOption] = useState<number | null>(null);
 	const [status, setStatus] = useState<'correct' | 'wrong' | 'none'>('none');
 
 	const challenge = challenges[activeIndex];
 	const options = challenge?.challengeOptions ?? [];
 
-	const onNext = () => {
-		setActiveIndex((current) => current + 1);
-	};
+	const onNext = () => setActiveIndex((current) => current + 1);
 
 	const onSelect = (id: number) => {
 		if (status !== 'none') return;
-
 		setSelectedOption(id);
 	};
 
 	const onContinue = () => {
-		if (!selectedOption) return;
+		if (selectedOption == null) return;
 
 		if (status === 'wrong') {
 			setStatus('none');
-			setSelectedOption(undefined);
+			setSelectedOption(null);
 			return;
 		}
 
 		if (status === 'correct') {
 			onNext();
 			setStatus('none');
-			setSelectedOption(undefined);
+			setSelectedOption(null);
 			return;
 		}
 
-		const correctOption = options.find((option) => option.correct);
+		const correctOption = options.find((o) => o.correct);
+		if (!correctOption) return;
 
-		if (!correctOption) {
-			return;
-		}
-
-		if (correctOption && correctOption.id === selectedOption) {
+		if (correctOption.id === selectedOption) {
 			startTransition(() => {
 				upsertChallengeProgress(challenge.id)
 					.then((response) => {
@@ -117,7 +106,7 @@ export const Quiz = ({
 
 						correctControls.play();
 						setStatus('correct');
-						setPercentage((prev) => prev + 100 / challenges.length);
+						setPercentage((prev) => Math.min(100, prev + 100 / challenges.length));
 
 						if (initialPercentage === 100) {
 							setHearts((prev) => Math.min(prev + 1, 5));
@@ -134,7 +123,7 @@ export const Quiz = ({
 							return;
 						}
 
-						// incorrectControls.play();
+						incorrectControls.play();
 						setStatus('wrong');
 
 						if (!response?.error) {
@@ -168,7 +157,7 @@ export const Quiz = ({
 					<h1 className="text font-bold text-neutral-700 lg:text-3xl">
 						Great job! <br /> You&apos;ve completed the lesson.
 					</h1>
-					<div className="2-full flex items-center gap-x-4">
+					<div className="flex w-full items-center gap-x-4">
 						<ResultCard variant="points" value={challenges.length * 10} />
 						<ResultCard variant="hearts" value={hearts} />
 					</div>
@@ -191,7 +180,7 @@ export const Quiz = ({
 			/>
 			<div className="flex-1">
 				<div className="flex h-full items-center justify-center">
-					<div className="flex w-full flex-col gap-y-12 px-6 lg:min-h-[350px] lg:w-[600px] lg:px-0">
+					<div className="lg:minh-[350px] flex w-full flex-col gap-y-12 px-6 lg:w-[600px] lg:px-0">
 						<h1 className="text-center text-lg font-bold text-neutral-700 lg:text-start lg:text-3xl">
 							{title}
 						</h1>
@@ -201,7 +190,7 @@ export const Quiz = ({
 								options={options}
 								onSelect={onSelect}
 								status={status}
-								selectedOption={selectedOption}
+								selectedOption={selectedOption ?? undefined}
 								disabled={pending}
 								type={challenge.type}
 							/>
@@ -209,7 +198,7 @@ export const Quiz = ({
 					</div>
 				</div>
 			</div>
-			<Footer disabled={pending || !selectedOption} status={status} onCheck={onContinue} />
+			<Footer disabled={pending || selectedOption == null} status={status} onCheck={onContinue} />
 		</>
 	);
 };
