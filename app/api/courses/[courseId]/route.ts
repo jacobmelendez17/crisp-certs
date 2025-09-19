@@ -1,49 +1,39 @@
-import db from "@/db/drizzle";
-import { eq } from "drizzle-orm";
-import { courses } from "@/db/schema";
-import { isAdmin } from "@/lib/admin";
-import { NextResponse } from "next/server";
+// app/api/courses/[id]/route.ts
+import { NextResponse } from 'next/server';
+import db from '@/db/drizzle';
+import { courses } from '@/db/schema';
+import { eq } from 'drizzle-orm';
 
-export const GET = async (
-    req: Request,
-    { params }: { params: { courseId: number } },
-) => {
-    if (!isAdmin()) {
-        return new NextResponse("Unauthorized", { status: 403 });
-    }
+export const dynamic = 'force-dynamic';
 
-    const data = await db.query.courses.findFirst({
-        where: eq(courses.id, params.courseId),
-    });
+function parseId(idParam: string) {
+  const id = Number(idParam);
+  if (Number.isNaN(id)) throw new Error('Invalid id');
+  return id;
+}
 
-    return NextResponse.json(data);
-};
+export async function GET(_req: Request, { params }: { params: { id: string } }) {
+  const id = parseId(params.id);
+  const [record] = await db.select().from(courses).where(eq(courses.id, id)).limit(1);
+  if (!record) return NextResponse.json({ error: 'Not found' }, { status: 404 });
+  return NextResponse.json(record);
+}
 
-export const PUT = async (
-    req: Request,
-    { params }: { params: { courseId: number } },
-) => {
-    if (!isAdmin()) {
-        return new NextResponse("Unauthorized", { status: 403 });
-    }
+export async function PUT(req: Request, { params }: { params: { id: string } }) {
+  const id = parseId(params.id);
+  const body = await req.json();
+  const toUpdate = {
+    title: body.title,
+    imageSrc: body.imageSrc
+  };
+  const [updated] = await db.update(courses).set(toUpdate).where(eq(courses.id, id)).returning();
+  if (!updated) return NextResponse.json({ error: 'Not found' }, { status: 404 });
+  return NextResponse.json(updated);
+}
 
-    const body = await req.json();
-    const data = await db.update(courses).set({
-        ...body,
-    }).where(eq(courses.id, params.courseId)).returning();
-
-    return NextResponse.json(data);
-};
-
-export const DELETE = async (
-    req: Request,
-    { params }: { params: { courseId: number } },
-) => {
-    if (!isAdmin()) {
-        return new NextResponse("Unauthorized", { status: 403 });
-    }
-
-    const data = await db.delete(courses).where(eq(courses.id, params.courseId)).returning();
-
-    return NextResponse.json(data);
+export async function DELETE(_req: Request, { params }: { params: { id: string } }) {
+  const id = parseId(params.id);
+  const [deleted] = await db.delete(courses).where(eq(courses.id, id)).returning();
+  if (!deleted) return NextResponse.json({ error: 'Not found' }, { status: 404 });
+  return NextResponse.json(deleted);
 }

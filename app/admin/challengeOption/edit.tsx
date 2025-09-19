@@ -5,7 +5,7 @@ export const ChallengeOptionEdit = () => {
 		<Edit>
 			<SimpleForm>
 				<TextInput source="text" validate={[required()]} label="Text" />
-				<BooleanInput source="corect" label="Correct option" />
+				<BooleanInput source="correct" label="Correct option" />
 				<ReferenceInput source="challengeId" reference="challenges" />
 				<TextInput source="imageSrc" label="Image URL" />
 				<TextInput source="audioSrc" label="Audio URL" />
