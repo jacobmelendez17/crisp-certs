@@ -1,32 +1,32 @@
+// app/lesson/[lessonId]/page.tsx
 import { getLesson, getUserProgress, getUserSubscription } from '@/db/queries';
 import { redirect } from 'next/navigation';
 import { Quiz } from '../quiz';
 
-type Props = {
-	params: {
-		lessonId: number;
-	};
+type LessonPageProps = {
+	params: Promise<{ lessonId: string }>; // 👈 match your Next version
 };
 
-const LessonIdPage = async ({ params }: Props) => {
-	const lessonData = getLesson(params.lessonId);
-	const userProgressData = getUserProgress();
-	const userSubscriptionData = getUserSubscription();
+export default async function LessonIdPage({ params }: LessonPageProps) {
+	const { lessonId: lessonIdStr } = await params; // 👈 await the promise
+	const lessonId = Number(lessonIdStr);
+	if (Number.isNaN(lessonId)) {
+		redirect('/learn');
+	}
 
 	const [lesson, userProgress, userSubscription] = await Promise.all([
-		lessonData,
-		userProgressData,
-		userSubscriptionData
+		getLesson(lessonId),
+		getUserProgress(),
+		getUserSubscription()
 	]);
 
 	if (!lesson || !userProgress) {
 		redirect('/learn');
 	}
 
-	const initialPercentage =
-		(lesson.challenges.filter((challenge) => challenge.completed).length /
-			lesson.challenges.length) *
-		100;
+	const total = lesson.challenges.length || 1;
+	const completed = lesson.challenges.filter((c) => c.completed).length;
+	const initialPercentage = (completed / total) * 100;
 
 	return (
 		<Quiz
@@ -37,6 +37,4 @@ const LessonIdPage = async ({ params }: Props) => {
 			userSubscription={userSubscription}
 		/>
 	);
-};
-
-export default LessonIdPage;
+}
