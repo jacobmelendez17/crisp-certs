@@ -55,25 +55,29 @@ export const getUnits = cache(async () => {
     });
 
     const normalizedData = data.map((unit) => {
-        const lessonsWithCompletedStatus = unit.lessons.map((lesson) => {
-            if (
-                lesson.challenges.length === 0
-            ) {
-                return { ...lesson, completed: false };
-            }
+  // compute completed
+  const lessonsWithCompleted = unit.lessons.map((lesson) => {
+    const completed =
+      lesson.challenges.length > 0 &&
+      lesson.challenges.every(
+        (ch) =>
+          ch.challengeProgress?.length &&
+          ch.challengeProgress.every((p) => p.completed)
+      );
+    return { ...lesson, completed };
+  });
 
-            const allCompletedChallenges = lesson.challenges.every((challenge) =>
-            {
-                return challenge.challengeProgress 
-                    && challenge.challengeProgress.length > 0
-                    && challenge.challengeProgress.every((progress) => progress.completed);
-            });
+  // add locked logic (first lesson unlocked, others gated by previous)
+  const lessonsWithLocked = lessonsWithCompleted.map((lesson, i, arr) => {
+    if (i === 0) {
+      return { ...lesson, locked: false }; // first lesson always unlocked
+    }
+    const prev = arr[i - 1];
+    return { ...lesson, locked: !prev.completed };
+  });
 
-            return { ...lesson, completed: allCompletedChallenges };
-        });
-
-        return { ...unit, lessons: lessonsWithCompletedStatus }
-    });
+  return { ...unit, lessons: lessonsWithLocked };
+});
 
     return normalizedData;
 });
