@@ -22,18 +22,23 @@ const main = async () => {
         await db.insert(schema.courses).values([
             {
                 id: 1,
-                title: "AWS",
-                imageSrc: "aws.svg",
+                title: "Spanish",
+                imageSrc: "mx.svg",
             },
             {
                 id: 2,
-                title: "Google Cloud",
-                imageSrc: "google.svg",
+                title: "Japanese",
+                imageSrc: "jp.svg",
             },
             {
                 id: 3,
-                title: "Azure",
-                imageSrc: "azure.svg",
+                title: "French",
+                imageSrc: "fr.svg",
+            },
+            {
+                id: 4,
+                title: "Tagalog",
+                imageSrc: "ph.svg",
             },
         ]);
 
@@ -42,16 +47,9 @@ const main = async () => {
                 id: 1,
                 courseId: 1,
                 title: "Unit 1",
-                description: "Learn the basics of Amazon Web Services",
+                description: "Learn the basics of Spanish",
                 order: 1,
-            },
-            {
-                id: 2,
-                courseId: 2,
-                title: "Unit 1",
-                description: "Learn the basics of Google Cloud",
-                order: 1,
-            },
+            }
         ]);
 
         await db.insert(schema.lessons).values([
@@ -85,111 +83,122 @@ const main = async () => {
                 order: 5,
                 title: "Verbs",
             },
-            {
-                id: 6,
-                unitId: 2,
-                order: 1,
-                title: "Nouns",
-            },
         ]);
 
         await db.insert(schema.challenges).values([
             {
                 id: 1,
                 lessonId: 1,
-                type: "ASSIST",
+                type: "SELECT",
                 order: 1,
-                question: 'What does CSP stand for?',
+                question: 'Which one of these is "the man"?',
             },
             {
                 id: 2,
                 lessonId: 1,
-                type: "SELECT",
+                type: "ASSIST",
                 order: 2,
-                question: 'What is a Cloud Service Prodiver(CSP)?',
+                question: '"the man"',
             },
             {
                 id: 3,
                 lessonId: 1,
                 type: "SELECT",
                 order: 3,
-                question: 'Which of these is NOT a characterisitc of a CSP"?',
+                question: 'Which one of these is "the robot"?',
             },
         ]);
 
         await db.insert(schema.challenge_options).values([
-            { challengeId: 1, correct: true,  text: "Cloud Service Provider", audioSrc: null },
-            { challengeId: 1, correct: false, text: "Computer Software Program", audioSrc: null },
-            { challengeId: 1, correct: false, text: "Cloud Software Platform", audioSrc: null },
-        ]);
-
-
-        await db.insert(schema.challenge_options).values([
             {
                 challengeId: 2,
-                imageSrc: null,
                 correct: true,
-                text: "A company that provides multiple cloud services accessible via a unified API",
-                audioSrc: null,
+                text: "el hombre",
+                audioSrc: "/es_man.mp3",
             },
             {
                 challengeId: 2,
-                imageSrc: null,
                 correct: false,
-                text: "A company that only sells SaaS applications",
-                audioSrc: null,
+                text: "la mujer",
+                audioSrc: "/es_woman.mp3",
             },
             {
                 challengeId: 2,
-                imageSrc: null,
                 correct: false,
-                text: "A type of hardware vendor that sells physical servers",
-                audioSrc: null,
-            },
-            {
-                challengeId: 2,
-                imageSrc: null,
-                correct: false,
-                text: "An on-premise virtualization platform",
-                audioSrc: null,
+                text: "el robot",
+                audioSrc: "/es_robot.mp3",
             },
         ]);
 
         await db.insert(schema.challenge_options).values([
             {
                 challengeId: 3,
+                imageSrc: "/man.svg",
                 correct: false,
-                text: "Metered billing based on usage",
-                imageSrc: null,
-                audioSrc: null,
+                text: "el hombre",
+                audioSrc: "/es_man.mp3",
             },
             {
                 challengeId: 3,
+                imageSrc: "/woman.svg",
                 correct: false,
-                text: "Rich monitoring built-in",
-                imageSrc: null,
-                audioSrc: null,
+                text: "la mujer",
+                audioSrc: "/es_woman.mp3",
             },
             {
                 challengeId: 3,
-                correct: false,
-                text: "Offers Infrastructure as a Service (IaaS)",
-                imageSrc: null,
-                audioSrc: null,
-            },
-            {
-                challengeId: 3,
-                correct: false,
-                text: "Automation with Infrastructure as Code (IaC)",
-                imageSrc: null,
-                audioSrc: null,
-            },
-            {
-                challengeId: 3,
+                imageSrc: "/robot.svg",
                 correct: true,
-                text: "Only offers one or two cloud services",
-                imageSrc: null,
-                audioSrc: null,
+                text: "el robot",
+                audioSrc: "/es_robot.mp3",
+            },
+        ]);
+
+        await db.insert(schema.challenge_options).values([
+            {
+                challengeId: 1,
+                imageSrc: "/man.svg",
+                correct: true,
+                text: "el hombre",
+                audioSrc: "/es_man.mp3",
+            },
+            {
+                challengeId: 1,
+                imageSrc: "/woman.svg",
+                correct: false,
+                text: "la mujer",
+                audioSrc: "/es_woman.mp3",
+            },
+            {
+                challengeId: 1,
+                imageSrc: "/robot.svg",
+                correct: false,
+                text: "el robot",
+                audioSrc: "/es_robot.mp3",
+            },
+        ]);
+
+        await db.insert(schema.challenges).values([
+            {
+                id: 4,
+                lessonId: 2,
+                type: "SELECT",
+                order: 1,
+                question: 'Which one of these is "the man"?',
+            },
+            {
+                id: 5,
+                lessonId: 2,
+                type: "ASSIST",
+                order: 2,
+                question: '"the man"',
+            },
+            {
+                id: 6,
+                lessonId: 2,
+                type: "SELECT",
+                order: 3,
+                question: 'Which one of these is "the robot"?',
             },
         ]);
 
