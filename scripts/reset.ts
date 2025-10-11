@@ -9,7 +9,7 @@ const db = drizzle(sql, { schema });
 
 const main = async () => {
     try {
-        console.log("Reseting the database");
+        console.log("Resetting the database");
 
         await db.delete(schema.courses);
         await db.delete(schema.userProgress);
