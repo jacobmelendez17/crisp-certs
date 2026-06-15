@@ -82,9 +82,19 @@ export const getUnits = cache(async () => {
     return normalizedData;
 });
 
-export const getCourses = cache (async () => {
-    const data = await db.query.courses.findMany();
+export const getCategories = cache(async () => {
+    const data = await db.query.categories.findMany();
+    return data;
+});
 
+export const getCourses = cache(async () => {
+    const data = await db.query.courses.findMany({
+        with: {
+            units: {
+                columns: { id: true },
+            },
+        },
+    });
     return data;
 });
 

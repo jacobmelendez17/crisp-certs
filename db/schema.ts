@@ -1,16 +1,31 @@
 import { boolean, pgEnum, pgTable, serial, text, integer, timestamp } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
+export const categories = pgTable("categories", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  imageSrc: text("image_src").notNull(),
+});
+
+export const categoriesRelations = relations(categories, ({ many }) => ({
+  courses: many(courses),
+}));
+
 export const courses = pgTable("courses", {
   id: serial("id").primaryKey(),
   title: text("title").notNull(),
   imageSrc: text("image_src").notNull(),
   description: text("description").notNull().default(""),
+  categoryId: integer("category_id").references(() => categories.id, { onDelete: "cascade" }),
 });
 
-export const coursesRelations = relations(courses, ({ many }) => ({
+export const coursesRelations = relations(courses, ({ many, one }) => ({
   userProgress: many(userProgress),
   units: many(units),
+  category: one(categories, {
+    fields: [courses.categoryId],
+    references: [categories.id],
+  }),
 }));
 
 export const units = pgTable("units", {
@@ -48,7 +63,6 @@ export const challengesEnum = pgEnum("type", ["SELECT", "ASSIST"]);
 
 export const challenges = pgTable("challenges", {
   id: serial("id").primaryKey(),
-  // ✅ correct column name for the FK:
   lessonId: integer("lesson_id").references(() => lessons.id, { onDelete: "cascade" }).notNull(),
   type: challengesEnum("type").notNull(),
   question: text("question").notNull(),
@@ -66,7 +80,6 @@ export const challengesRelations = relations(challenges, ({ one, many }) => ({
 
 export const challenge_options = pgTable("challenge_options", {
   id: serial("id").primaryKey(),
-  // ✅ reference challenges, not lessons:
   challengeId: integer("challenge_id").references(() => challenges.id, { onDelete: "cascade" }).notNull(),
   text: text("text").notNull(),
   correct: boolean("correct").notNull(),
@@ -84,7 +97,6 @@ export const challengeOptionsRelations = relations(challenge_options, ({ one }) 
 export const challenge_progress = pgTable("challenge_progress", {
   id: serial("id").primaryKey(),
   userId: text("user_id").notNull(),
-  // ✅ reference challenges, not lessons:
   challengeId: integer("challenge_id").references(() => challenges.id, { onDelete: "cascade" }).notNull(),
   completed: boolean("completed").notNull().default(false),
 });
