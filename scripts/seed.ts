@@ -22,23 +22,27 @@ const main = async () => {
         await db.insert(schema.courses).values([
             {
                 id: 1,
-                title: "Spanish",
-                imageSrc: "mx.svg",
+                title: "AWS Cloud Practitioner",
+                imageSrc: "/aws.svg",
+                description: "Foundational AWS cloud concepts and core services",
             },
             {
                 id: 2,
-                title: "Japanese",
-                imageSrc: "jp.svg",
+                title: "Azure Fundamentals",
+                imageSrc: "/azure.svg",
+                description: "Core Microsoft Azure cloud services and solutions",
             },
             {
                 id: 3,
-                title: "French",
-                imageSrc: "fr.svg",
+                title: "Google Cloud Associate",
+                imageSrc: "/google.svg",
+                description: "Essential Google Cloud Platform skills and services",
             },
             {
                 id: 4,
-                title: "Tagalog",
-                imageSrc: "ph.svg",
+                title: "CompTIA A+",
+                imageSrc: "/comptia.webp",
+                description: "Foundational IT support and hardware troubleshooting",
             },
         ]);
 
@@ -47,7 +51,7 @@ const main = async () => {
                 id: 1,
                 courseId: 1,
                 title: "Unit 1",
-                description: "Learn the basics of Spanish",
+                description: "Cloud concepts and AWS core services",
                 order: 1,
             }
         ]);

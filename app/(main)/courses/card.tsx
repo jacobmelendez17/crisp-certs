@@ -6,12 +6,13 @@ type Props = {
 	title: string;
 	id: number;
 	imageSrc: string;
+	description?: string;
 	onClick: (id: number) => void;
 	disabled?: boolean;
 	active?: boolean;
 };
 
-export const Card = ({ title, id, imageSrc, disabled, onClick, active }: Props) => {
+export const Card = ({ title, id, imageSrc, description, disabled, onClick, active }: Props) => {
 	return (
 		<div
 			onClick={() => onClick(id)}
@@ -35,6 +36,9 @@ export const Card = ({ title, id, imageSrc, disabled, onClick, active }: Props) 
 				className="rounded-lg border object-cover drop-shadow-md"
 			/>
 			<p className="mt-3 text-center font-bold text-neutral-700">{title}</p>
+			{description && (
+				<p className="mt-1 text-center text-xs text-neutral-500">{description}</p>
+			)}
 		</div>
 	);
 };

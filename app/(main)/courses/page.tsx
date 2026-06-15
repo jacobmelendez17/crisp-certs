@@ -9,7 +9,7 @@ const CoursesPage = async () => {
 
 	return (
 		<div className="mx-auto h-full max-w-[912px]">
-			<h1 className="text-neurtral-700 text-2xl font-bold">Language Courses</h1>
+			<h1 className="text-neurtral-700 text-2xl font-bold">Choose a Certification</h1>
 			<List courses={courses} activeCourseId={userProgress?.activeCourseId} />
 		</div>
 	);
