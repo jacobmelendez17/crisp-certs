@@ -606,7 +606,7 @@ export const comptiaACore1Questions: ComptiaQuestion[] = [
   {
     "unitTitle": "1.2 - Mobile Devices",
     "type": "SELECT",
-    "question": "Which of the following correctly matches \"Stylus\"?",
+    "question": "What is the primary function of a stylus (as a mobile device accessory)?",
     "options": [
       {
         "text": "Precise input and drawing",
@@ -629,7 +629,7 @@ export const comptiaACore1Questions: ComptiaQuestion[] = [
   {
     "unitTitle": "1.2 - Mobile Devices",
     "type": "SELECT",
-    "question": "Which of the following correctly matches \"Headset\"?",
+    "question": "What is the primary function of a headset (as a mobile device accessory)?",
     "options": [
       {
         "text": "Precise input and drawing",
@@ -652,7 +652,7 @@ export const comptiaACore1Questions: ComptiaQuestion[] = [
   {
     "unitTitle": "1.2 - Mobile Devices",
     "type": "SELECT",
-    "question": "Which of the following correctly matches \"Speakers\"?",
+    "question": "What is the primary function of external speakers (as a mobile device accessory)?",
     "options": [
       {
         "text": "Precise input and drawing",
@@ -675,7 +675,7 @@ export const comptiaACore1Questions: ComptiaQuestion[] = [
   {
     "unitTitle": "1.2 - Mobile Devices",
     "type": "SELECT",
-    "question": "Which of the following correctly matches \"Webcam\"?",
+    "question": "What is the primary function of a webcam (as a mobile device accessory)?",
     "options": [
       {
         "text": "Precise input and drawing",
@@ -698,7 +698,7 @@ export const comptiaACore1Questions: ComptiaQuestion[] = [
   {
     "unitTitle": "1.2 - Mobile Devices",
     "type": "SELECT",
-    "question": "Which of the following correctly matches \"Stylus\"?",
+    "question": "Which connectivity options are typically available for a stylus?",
     "options": [
       {
         "text": "Passive (direct-touch) or Active (Bluetooth-enabled)",
@@ -721,7 +721,7 @@ export const comptiaACore1Questions: ComptiaQuestion[] = [
   {
     "unitTitle": "1.2 - Mobile Devices",
     "type": "SELECT",
-    "question": "Which of the following correctly matches \"Headset\"?",
+    "question": "Which connectivity options are typically available for a headset?",
     "options": [
       {
         "text": "Passive (direct-touch) or Active (Bluetooth-enabled)",
@@ -744,7 +744,7 @@ export const comptiaACore1Questions: ComptiaQuestion[] = [
   {
     "unitTitle": "1.2 - Mobile Devices",
     "type": "SELECT",
-    "question": "Which of the following correctly matches \"Speakers\"?",
+    "question": "Which connectivity options are typically available for external speakers?",
     "options": [
       {
         "text": "Passive (direct-touch) or Active (Bluetooth-enabled)",
@@ -767,7 +767,7 @@ export const comptiaACore1Questions: ComptiaQuestion[] = [
   {
     "unitTitle": "1.2 - Mobile Devices",
     "type": "SELECT",
-    "question": "Which of the following correctly matches \"Webcam\"?",
+    "question": "Which connectivity options are typically available for a webcam?",
     "options": [
       {
         "text": "Passive (direct-touch) or Active (Bluetooth-enabled)",
@@ -3885,7 +3885,7 @@ export const comptiaACore1Questions: ComptiaQuestion[] = [
   {
     "unitTitle": "3.1 - Displays",
     "type": "SELECT",
-    "question": "Which of the following correctly matches \"Pixel density\"?",
+    "question": "Which of the following correctly defines \"pixel density\" as a display attribute?",
     "options": [
       {
         "text": "The number of individual pixels packed into a given area of the screen",
@@ -3908,7 +3908,7 @@ export const comptiaACore1Questions: ComptiaQuestion[] = [
   {
     "unitTitle": "3.1 - Displays",
     "type": "SELECT",
-    "question": "Which of the following correctly matches \"Refresh rate\"?",
+    "question": "Which of the following correctly defines \"refresh rate\" as a display attribute?",
     "options": [
       {
         "text": "The number of individual pixels packed into a given area of the screen",
@@ -3931,7 +3931,7 @@ export const comptiaACore1Questions: ComptiaQuestion[] = [
   {
     "unitTitle": "3.1 - Displays",
     "type": "SELECT",
-    "question": "Which of the following correctly matches \"Screen resolution\"?",
+    "question": "Which of the following correctly defines \"screen resolution\" as a display attribute?",
     "options": [
       {
         "text": "The number of individual pixels packed into a given area of the screen",
@@ -3954,7 +3954,7 @@ export const comptiaACore1Questions: ComptiaQuestion[] = [
   {
     "unitTitle": "3.1 - Displays",
     "type": "SELECT",
-    "question": "Which of the following correctly matches \"Color gamut\"?",
+    "question": "Which of the following correctly defines \"color gamut\" as a display attribute?",
     "options": [
       {
         "text": "The number of individual pixels packed into a given area of the screen",
@@ -8092,7 +8092,7 @@ export const comptiaACore1Questions: ComptiaQuestion[] = [
   {
     "unitTitle": "5.2 - Troubleshooting Storage Devices",
     "type": "SELECT",
-    "question": "Which of the following correctly matches \"Solid green\"?",
+    "question": "On a RAID array drive LED, what does a solid green state typically indicate?",
     "options": [
       {
         "text": "Drive is powered and operating normally",
@@ -8119,7 +8119,7 @@ export const comptiaACore1Questions: ComptiaQuestion[] = [
   {
     "unitTitle": "5.2 - Troubleshooting Storage Devices",
     "type": "SELECT",
-    "question": "Which of the following correctly matches \"Blinking green\"?",
+    "question": "On a RAID array drive LED, what does a blinking green state typically indicate?",
     "options": [
       {
         "text": "Drive is powered and operating normally",
@@ -8146,7 +8146,7 @@ export const comptiaACore1Questions: ComptiaQuestion[] = [
   {
     "unitTitle": "5.2 - Troubleshooting Storage Devices",
     "type": "SELECT",
-    "question": "Which of the following correctly matches \"Solid amber/orange\"?",
+    "question": "On a RAID array drive LED, what does a solid amber/orange state typically indicate?",
     "options": [
       {
         "text": "Drive is powered and operating normally",
@@ -8173,7 +8173,7 @@ export const comptiaACore1Questions: ComptiaQuestion[] = [
   {
     "unitTitle": "5.2 - Troubleshooting Storage Devices",
     "type": "SELECT",
-    "question": "Which of the following correctly matches \"Solid red\"?",
+    "question": "On a RAID array drive LED, what does a solid red state typically indicate?",
     "options": [
       {
         "text": "Drive is powered and operating normally",
@@ -8200,7 +8200,7 @@ export const comptiaACore1Questions: ComptiaQuestion[] = [
   {
     "unitTitle": "5.2 - Troubleshooting Storage Devices",
     "type": "SELECT",
-    "question": "Which of the following correctly matches \"No LED activity\"?",
+    "question": "On a RAID array, what does no LED activity on a drive typically indicate?",
     "options": [
       {
         "text": "Drive is powered and operating normally",
