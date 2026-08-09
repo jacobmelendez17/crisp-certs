@@ -3,8 +3,6 @@ import { UnitBanner } from './unit-banner';
 import { LessonButton } from './lesson-button';
 
 type Props = {
-	id: number;
-	order: number;
 	title: string;
 	description: string;
 	color?: string;
@@ -20,8 +18,6 @@ type Props = {
 };
 
 export const Unit = ({
-	id,
-	order,
 	title,
 	description,
 	color,
