@@ -3,9 +3,18 @@ import { drizzle } from "drizzle-orm/neon-http";
 import { neon } from "@neondatabase/serverless";
 
 import * as schema from "../db/schema";
+import { comptiaACore1Questions } from "./data/comptia-a-core1-questions";
 
 const sql = neon(process.env.DATABASE_URL!);
 const db = drizzle(sql, { schema });
+
+const chunk = <T,>(items: T[], size: number): T[][] => {
+    const chunks: T[][] = [];
+    for (let i = 0; i < items.length; i += size) {
+        chunks.push(items.slice(i, i + size));
+    }
+    return chunks;
+};
 
 const main = async () => {
     try {
@@ -173,6 +182,85 @@ const main = async () => {
             { challengeId: 3, correct: true,  text: "Pay-as-you-go pricing" },
             { challengeId: 3, correct: false, text: "Global reach"           },
         ]);
+
+        // ── Challenges (A+ Core 1 – imported from CompTIA_A_Core_1_Questions_Organized.csv) ──
+        // Maps each CSV "Unit" value to the lesson id created above (one lesson per unit).
+        const unitTitleToLessonId: Record<string, number> = {
+            "1.1 - Laptop Hardware":                    6,
+            "1.2 - Mobile Devices":                     7,
+            "1.3 - Mobile Device Network & Management": 8,
+            "2.1 - Introduction to IP":                 9,
+            "2.2 - Wireless Network Technologies":      10,
+            "2.3 - Network Services":                   11,
+            "2.4 - DNS & DHCP":                          12,
+            "2.5 - Network Devices":                    13,
+            "2.6 - IP Addresses":                       14,
+            "2.7 - Connection Types":                   15,
+            "2.8 - Network Tools":                      16,
+            "3.1 - Displays":                           17,
+            "3.2 - Cables Part 1":                      18,
+            "3.2 - Cables Part 2":                      19,
+            "3.2 - Connectors":                         20,
+            "3.3 - Memory":                              21,
+            "3.4 - Storage Devices":                    22,
+            "3.5 - Motherboards":                       23,
+            "3.5 - BIOS":                                24,
+            "3.5 - More Computer Parts":                25,
+            "3.6 - Computer Power":                     26,
+            "3.7 - Multifunction Devices":              27,
+            "3.8 - Printers Part 1":                    28,
+            "3.8 - Printers Part 2":                    29,
+            "4.1 - Virtualization":                     30,
+            "4.2 - Cloud":                                31,
+            "5.1 - Troubleshooting Hardware":           32,
+            "5.2 - Troubleshooting Storage Devices":    33,
+            "5.3 - Troubleshooting Display Issues":     34,
+            "5.4 - Troubleshooting Mobile Devices":     35,
+            "5.5 - Troubleshooting Networks":           36,
+            "5.6 - Troubleshooting Printers":           37,
+        };
+
+        const orderByLessonId: Record<number, number> = {};
+        let nextChallengeId = 4;
+
+        const comptiaChallengeRows: (typeof schema.challenges.$inferInsert)[] = [];
+        const comptiaOptionRows: (typeof schema.challenge_options.$inferInsert)[] = [];
+
+        for (const q of comptiaACore1Questions) {
+            const lessonId = unitTitleToLessonId[q.unitTitle];
+            if (!lessonId) {
+                throw new Error(`No lesson mapped for unit "${q.unitTitle}"`);
+            }
+
+            const order = (orderByLessonId[lessonId] = (orderByLessonId[lessonId] ?? 0) + 1);
+            const challengeId = nextChallengeId++;
+
+            comptiaChallengeRows.push({
+                id: challengeId,
+                lessonId,
+                type: q.type,
+                question: q.question,
+                order,
+            });
+
+            for (const option of q.options) {
+                comptiaOptionRows.push({
+                    challengeId,
+                    text: option.text,
+                    correct: option.correct,
+                });
+            }
+        }
+
+        for (const batch of chunk(comptiaChallengeRows, 100)) {
+            await db.insert(schema.challenges).values(batch);
+        }
+
+        for (const batch of chunk(comptiaOptionRows, 200)) {
+            await db.insert(schema.challenge_options).values(batch);
+        }
+
+        console.log(`Seeded ${comptiaChallengeRows.length} A+ Core 1 challenges with ${comptiaOptionRows.length} options`);
 
         console.log("Seeding finished");
     } catch (error) {

@@ -63,39 +63,52 @@ export const Quiz = ({
 		return uncompletedIndex === -1 ? 0 : uncompletedIndex;
 	});
 
-	const [selectedOption, setSelectedOption] = useState<number | null>(null);
+	const [selectedOptions, setSelectedOptions] = useState<number[]>([]);
 	const [status, setStatus] = useState<'correct' | 'wrong' | 'none'>('none');
 
 	const challenge = challenges[activeIndex];
 	const options = challenge?.challengeOptions ?? [];
+	const isMultiSelect = challenge?.type === 'MULTI_SELECT';
 
 	const onNext = () => setActiveIndex((current) => current + 1);
 
 	const onSelect = (id: number) => {
 		if (status !== 'none') return;
-		setSelectedOption(id);
+
+		if (isMultiSelect) {
+			setSelectedOptions((current) =>
+				current.includes(id) ? current.filter((optionId) => optionId !== id) : [...current, id]
+			);
+		} else {
+			setSelectedOptions([id]);
+		}
 	};
 
 	const onContinue = () => {
-		if (selectedOption == null) return;
+		if (selectedOptions.length === 0) return;
 
 		if (status === 'wrong') {
 			setStatus('none');
-			setSelectedOption(null);
+			setSelectedOptions([]);
 			return;
 		}
 
 		if (status === 'correct') {
 			onNext();
 			setStatus('none');
-			setSelectedOption(null);
+			setSelectedOptions([]);
 			return;
 		}
 
-		const correctOption = options.find((o) => o.correct);
-		if (!correctOption) return;
+		const correctOptionIds = options.filter((o) => o.correct).map((o) => o.id);
+		if (correctOptionIds.length === 0) return;
 
-		if (correctOption.id === selectedOption) {
+		const isCorrect = isMultiSelect
+			? correctOptionIds.length === selectedOptions.length &&
+				correctOptionIds.every((id) => selectedOptions.includes(id))
+			: correctOptionIds[0] === selectedOptions[0];
+
+		if (isCorrect) {
 			startTransition(() => {
 				upsertChallengeProgress(challenge.id)
 					.then((response) => {
@@ -190,7 +203,7 @@ export const Quiz = ({
 								options={options}
 								onSelect={onSelect}
 								status={status}
-								selectedOption={selectedOption ?? undefined}
+								selectedOptions={selectedOptions}
 								disabled={pending}
 								type={challenge.type}
 							/>
@@ -198,7 +211,7 @@ export const Quiz = ({
 					</div>
 				</div>
 			</div>
-			<Footer disabled={pending || selectedOption == null} status={status} onCheck={onContinue} />
+			<Footer disabled={pending || selectedOptions.length === 0} status={status} onCheck={onContinue} />
 		</>
 	);
 };

@@ -6,18 +6,18 @@ type Props = {
 	options: (typeof challenge_options.$inferSelect)[];
 	onSelect: (id: number) => void;
 	status: 'correct' | 'wrong' | 'none';
-	selectedOption?: number;
+	selectedOptions: number[];
 	disabled?: boolean;
 	type: (typeof challenges.$inferSelect)['type'];
 };
 
-export const Challenge = ({ options, onSelect, status, selectedOption, disabled, type }: Props) => {
+export const Challenge = ({ options, onSelect, status, selectedOptions, disabled, type }: Props) => {
 	return (
 		<div
 			className={cn(
 				'grid gap-4',
 				type === 'ASSIST' && 'grid-cols-1',
-				type === 'SELECT' && 'grid-cols-2 lg:grid-cols-[repeat(auto-fit,minmax(0,1fr))]'
+				type !== 'ASSIST' && 'grid-cols-2 lg:grid-cols-[repeat(auto-fit,minmax(0,1fr))]'
 			)}
 		>
 			{options.map((option, i) => (
@@ -27,7 +27,7 @@ export const Challenge = ({ options, onSelect, status, selectedOption, disabled,
 					text={option.text}
 					imageSrc={option.imageSrc}
 					shortcut={`${i + 1}`}
-					selected={selectedOption === option.id}
+					selected={selectedOptions.includes(option.id)}
 					onClick={() => onSelect(option.id)}
 					status={status}
 					audioSrc={option.audioSrc}
